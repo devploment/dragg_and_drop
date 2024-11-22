@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draggable Touch</title>
+    <style>
+        .draggable {
+            width: 100px;
+            height: 100px;
+            background-color: lightblue;
+            text-align: center;
+            line-height: 100px;
+            position: absolute;
+            left: 50px;
+            top: 50px;
+            touch-action: none; /* منع السلوك الافتراضي للتمرير */
+        }
+    </style>
+</head>
+<body>
+    <div id="dragBox" class="draggable">اسحبني</div>
+
+    <script>
+        const dragItem = document.getElementById("dragBox");
+
+        let active = false;
+        let currentX, currentY, initialX, initialY;
+        let xOffset = 0, yOffset = 0;
+
+        dragItem.addEventListener("touchstart", dragStart);
+        dragItem.addEventListener("touchmove", drag);
+        dragItem.addEventListener("touchend", dragEnd);
+
+        function dragStart(event) {
+            active = true;
+            initialX = event.touches[0].clientX - xOffset;
+            initialY = event.touches[0].clientY - yOffset;
+        }
+
+        function drag(event) {
+            if (active) {
+                event.preventDefault();
+
+                currentX = event.touches[0].clientX - initialX;
+                currentY = event.touches[0].clientY - initialY;
+
+                xOffset = currentX;
+                yOffset = currentY;
+
+                setTranslate(currentX, currentY, dragItem);
+            }
+        }
+
+        function dragEnd() {
+            active = false;
+        }
+
+        function setTranslate(xPos, yPos, el) {
+            el.style.transform = `translate(${xPos}px, ${yPos}px)`;
+        }
+    </script>
+</body>
+</html>
